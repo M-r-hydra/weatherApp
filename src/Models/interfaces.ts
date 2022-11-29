@@ -1,3 +1,13 @@
+export interface I_DetectOptions {
+  nameForShow: string;
+  value: number | string;
+}
+export interface I_locationValue {
+  lat?: string;
+  lon?: string;
+  cityName?: string;
+  postcode?: string;
+}
 // GOT FROM RAPID API
 export interface weatherObject {
   location: Location;

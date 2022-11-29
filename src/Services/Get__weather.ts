@@ -6,18 +6,18 @@ export const Get__weather = (
   API_privateKey: string,
   location: string,
   setWeatherData: Function
-): Promise<boolean> => {
+): Promise<boolean | { err: Error; value: false }> => {
   return axios
     .get(`${Get__fullAPI_Address}?key=${API_privateKey}&q=${location}`)
     .then((res) => {
-      console.log(res.data);
+      setWeatherData(res.data);
       return true;
     })
-    .catch(() => {
+    .catch((err) => {
       Swal.fire({
         icon: "error",
-        title: "Error In Fetch Data !",
+        title: err.response.data.error.message,
       });
-      return false;
+      return { err, value: false };
     });
 };
