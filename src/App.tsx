@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import DetectHelper from "./Components/DetectHelper/DetectHelper";
 import WheatherShower from "./Components/WhatherShower/WheatherShower";
 import { I_locationValue, weatherObject } from "./Models/interfaces";
+import { get__locationByLatLonService } from "./Services/Get__locationByLatLonService";
 import { Get__weatherService } from "./Services/Get__weatherService";
 
 const App = () => {
@@ -19,6 +20,8 @@ const App = () => {
     lat: "",
     lon: "",
     postcode: "",
+    cityCode: "",
+    countryCode: "",
   });
   const [errorInFetchData, setErrorInFetchData] = useState<string>("");
   const [fetchDataStatus, setFetchDataStatus] = useState<
@@ -30,10 +33,9 @@ const App = () => {
   const [userSelectedLon, setUserSelectedLon] = useState<string>("");
   // States
   // Methods
-
   // Methods
   const selectedLocation = useCallback(() => {
-    const getLocation = function getLocation(): string {
+    function getLocation(): string {
       switch (locationType) {
         case "cityName":
           return locationValue.cityName || "";
@@ -46,7 +48,7 @@ const App = () => {
         default:
           return "";
       }
-    };
+    }
     return getLocation();
   }, [locationValue, locationType]);
 
@@ -60,6 +62,10 @@ const App = () => {
       setFetchDataStatus
     );
   }, [locationType, selectedLocation]);
+  useEffect(() => {
+    if (locationType === "lat&lon") {
+    }
+  }, [locationType]);
   // Life cycles
 
   return (
@@ -100,14 +106,12 @@ const App = () => {
                 setLocationType("cityName");
                 return;
               } else if (value === "lat&lon") {
-                setLocationValue(
-                  (prevState: I_locationValue): I_locationValue => {
-                    return {
-                      ...prevState,
-                      lat: userSelectedLon,
-                      lon: userSelectedLon,
-                    };
-                  }
+                get__locationByLatLonService(
+                  locationValue.cityName,
+                  locationValue.postcode,
+                  locationValue.countryCode,
+                  apiPriveteKey,
+                  setLocationValue
                 );
                 setLocationType("lat&lon");
                 return;

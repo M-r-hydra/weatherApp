@@ -6,6 +6,7 @@ import styles from "./WheatherShower.module.css";
 // CSS
 // Models
 import { weatherObject } from "../../Models/interfaces";
+import AboutCurrCity from "../AboutCurrCity/AboutCurrCity";
 // Models
 
 type WheatherShowerProps = {
@@ -16,7 +17,7 @@ const WheatherShower: React.FunctionComponent<WheatherShowerProps> = ({
   data: {
     current: {
       cloud,
-      condition,
+      condition: { code, icon, text },
       feelslike_c,
       feelslike_f,
       gust_kph,
@@ -51,7 +52,12 @@ const WheatherShower: React.FunctionComponent<WheatherShowerProps> = ({
     },
   },
 }) => {
-  return <div></div>;
+  return (
+    <div className="flex flex-col items-center justify-start">
+      <AboutCurrCity cityName={`Country : ${country} City : ${name}`} />
+      <img src={icon} alt="" />
+    </div>
+  );
 };
 
 export default WheatherShower;

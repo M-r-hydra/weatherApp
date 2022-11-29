@@ -7,6 +7,8 @@ export interface I_locationValue {
   lon?: string;
   cityName?: string;
   postcode?: string;
+  countryCode?: string;
+  cityCode?: string;
 }
 // GOT FROM RAPID API
 export interface weatherObject {

@@ -12,7 +12,7 @@ type AboutCurrCityProps = {
 const AboutCurrCity: React.FunctionComponent<AboutCurrCityProps> = ({
   cityName,
 }) => {
-  return <div className=""></div>;
+  return <div className="">{cityName}</div>;
 };
 
 export default AboutCurrCity;
