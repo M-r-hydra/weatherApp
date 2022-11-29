@@ -95,7 +95,7 @@ const App = () => {
               }
             }}
           />
-          <WheatherShower />
+          <WheatherShower data={weatherData} />
         </>
       )}
     </div>
