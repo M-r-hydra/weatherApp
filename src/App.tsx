@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from "react";
 
 const App = () => {
-  return (
-    <div>App</div>
-  )
-}
+  const apiPriveteKey = "";
+  const [weatherData, setWeatherData] = useState();
+  const [errorInFetchData, setErrorInFetchData] = useState<string>("");
+  return <div></div>;
+};
 
-export default App
+export default App;
