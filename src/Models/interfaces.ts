@@ -3,12 +3,12 @@ export interface I_DetectOptions {
   value: number | string;
 }
 export interface I_locationValue {
-  lat?: string;
-  lon?: string;
-  cityName?: string;
-  postcode?: string;
-  countryCode?: string;
-  cityCode?: string;
+  lat: string;
+  lon: string;
+  cityName: string;
+  postcode: string;
+  countryCode: string;
+  cityCode: string;
 }
 // GOT FROM RAPID API
 export interface weatherObject {

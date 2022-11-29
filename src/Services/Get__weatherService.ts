@@ -13,7 +13,7 @@ export const Get__weatherService = async (
   setWeatherData: React.Dispatch<
     React.SetStateAction<weatherObject | undefined>
   >,
-  setFetchData: React.Dispatch<
+  setFetchStatus: React.Dispatch<
     React.SetStateAction<"done" | "error" | "receiving">
   >
 ): Promise<boolean | { err: Error; value: false }> => {
@@ -21,7 +21,7 @@ export const Get__weatherService = async (
     .get(`${Get__fullAPI_Address}?key=${API_privateKey}&q=${location}`)
     .then((res) => {
       setWeatherData(res.data);
-      setFetchData("done");
+      setFetchStatus("done");
       return true;
     })
     .catch((err) => {
@@ -29,7 +29,7 @@ export const Get__weatherService = async (
         icon: "error",
         title: err.response.data.error.message,
       });
-      setFetchData("error");
+      setFetchStatus("error");
       return { err, value: false };
     });
 };

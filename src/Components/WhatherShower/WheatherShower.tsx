@@ -11,6 +11,7 @@ import AboutCurrCity from "../AboutCurrCity/AboutCurrCity";
 
 type WheatherShowerProps = {
   data: weatherObject | any;
+  onCityChange: React.Dispatch<React.SetStateAction<any>>;
 };
 
 const WheatherShower: React.FunctionComponent<WheatherShowerProps> = ({
@@ -51,11 +52,19 @@ const WheatherShower: React.FunctionComponent<WheatherShowerProps> = ({
       tz_id,
     },
   },
+  onCityChange,
 }) => {
   return (
     <div className="flex flex-col items-center justify-start">
       <AboutCurrCity cityName={`Country : ${country} City : ${name}`} />
       <img src={icon} alt="" />
+      <input
+        type="text"
+        onChange={(e: any) => {
+          onCityChange(e.target.value);
+        }}
+        placeholder="cityName ...."
+      />
     </div>
   );
 };

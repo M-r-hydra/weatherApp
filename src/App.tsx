@@ -15,7 +15,7 @@ const App = () => {
   const [locationType, setLocationType] = useState<
     "ip" | "cityName" | "lat&lon" | "postCode"
   >("ip");
-  const [locationValue, setLocationValue] = useState<I_locationValue>({
+  const [currLocationData, setCurrLocationData] = useState<I_locationValue>({
     cityName: "",
     lat: "",
     lon: "",
@@ -29,8 +29,14 @@ const App = () => {
   >("receiving");
   const [userSelectedCityValue, setUserSelectedCityValue] =
     useState<string>("Tehran");
-  const [userSelectedLat, setUserSelectedLat] = useState<string>("");
-  const [userSelectedLon, setUserSelectedLon] = useState<string>("");
+  const [userInputData, setUserInputData] = useState<I_locationValue>({
+    cityCode: "",
+    cityName: "",
+    countryCode: "",
+    lat: "",
+    lon: "",
+    postcode: "",
+  });
   // States
   // Methods
   // Methods
@@ -38,19 +44,19 @@ const App = () => {
     function getLocation(): string {
       switch (locationType) {
         case "cityName":
-          return locationValue.cityName || "";
+          return currLocationData.cityName || "";
         case "ip":
           return "auto:ip";
         case "lat&lon":
-          return `${locationValue.lat},${locationValue.lon}`;
+          return `${currLocationData.lat},${currLocationData.lon}`;
         case "postCode":
-          return locationValue.postcode || "0";
+          return currLocationData.postcode || "0";
         default:
           return "";
       }
     }
     return getLocation();
-  }, [locationValue, locationType]);
+  }, [currLocationData, locationType]);
 
   // Life cycles
   useEffect(() => {
@@ -63,9 +69,37 @@ const App = () => {
     );
   }, [locationType, selectedLocation]);
   useEffect(() => {
-    if (locationType === "lat&lon") {
+    if (locationType === "cityName") {
+      get__locationByLatLonService(
+        userInputData.cityName,
+        "",
+        "",
+        apiPriveteKey,
+        setCurrLocationData,
+        setFetchDataStatus
+      );
+      return;
+    } else if (locationType === "postCode") {
+      get__locationByLatLonService(
+        "",
+        userInputData.cityCode,
+        "",
+        apiPriveteKey,
+        setCurrLocationData,
+        setFetchDataStatus
+      );
+      return;
+    } else if (locationType === "ip") {
+      Get__weatherService(
+        apiAddress,
+        apiPriveteKey,
+        selectedLocation(),
+        setWeatherData,
+        setFetchDataStatus
+      );
+      return;
     }
-  }, [locationType]);
+  }, [locationType, userInputData]);
   // Life cycles
 
   return (
@@ -98,7 +132,7 @@ const App = () => {
                 setLocationType("ip");
                 return;
               } else if (value === "cityName") {
-                setLocationValue(
+                setCurrLocationData(
                   (prevState: I_locationValue): I_locationValue => {
                     return { ...prevState, cityName: userSelectedCityValue };
                   }
@@ -107,11 +141,12 @@ const App = () => {
                 return;
               } else if (value === "lat&lon") {
                 get__locationByLatLonService(
-                  locationValue.cityName,
-                  locationValue.postcode,
-                  locationValue.countryCode,
+                  currLocationData.cityName,
+                  currLocationData.postcode,
+                  currLocationData.countryCode,
                   apiPriveteKey,
-                  setLocationValue
+                  setCurrLocationData,
+                  setFetchDataStatus
                 );
                 setLocationType("lat&lon");
                 return;
@@ -121,7 +156,15 @@ const App = () => {
               }
             }}
           />
-          <WheatherShower data={weatherData} />
+          <WheatherShower
+            data={weatherData}
+            onCityChange={(value: string): void => {
+              setUserInputData((prevState) => ({
+                ...prevState,
+                cityName: value,
+              }));
+            }}
+          />
         </>
       )}
     </div>
