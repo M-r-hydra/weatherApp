@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DetectHelper from "./Components/DetectHelper/DetectHelper";
 import WheatherShower from "./Components/WhatherShower/WheatherShower";
 import { I_locationValue, weatherObject } from "./Models/interfaces";
@@ -24,34 +24,42 @@ const App = () => {
   const [fetchDataStatus, setFetchDataStatus] = useState<
     "done" | "receiving" | "error"
   >("receiving");
-  const [cityInputValue, setCityInputValue] = useState<string>("");
+  const [userSelectedCityValue, setUserSelectedCityValue] =
+    useState<string>("Tehran");
+  const [userSelectedLat, setUserSelectedLat] = useState<string>("");
+  const [userSelectedLon, setUserSelectedLon] = useState<string>("");
   // States
   // Methods
-  function getLocation(): string {
-    switch (locationType) {
-      case "cityName":
-        return locationValue.cityName || "";
-      case "ip":
-        return "auto:ip";
-      case "lat&lon":
-        return `${locationValue.lat},${locationValue.lon}`;
-      case "postCode":
-        return locationValue.postcode || "0";
-      default:
-        return "";
-    }
-  }
+
   // Methods
+  const selectedLocation = useCallback(() => {
+    const getLocation = function getLocation(): string {
+      switch (locationType) {
+        case "cityName":
+          return locationValue.cityName || "";
+        case "ip":
+          return "auto:ip";
+        case "lat&lon":
+          return `${locationValue.lat},${locationValue.lon}`;
+        case "postCode":
+          return locationValue.postcode || "0";
+        default:
+          return "";
+      }
+    };
+    return getLocation();
+  }, [locationValue, locationType]);
+
   // Life cycles
   useEffect(() => {
     Get__weather(
       apiAddress,
       apiPriveteKey,
-      getLocation(),
+      selectedLocation(),
       setWeatherData,
       setFetchDataStatus
     );
-  }, []);
+  }, [locationType, selectedLocation]);
   // Life cycles
 
   return (
@@ -66,7 +74,7 @@ const App = () => {
               Get__weather(
                 apiAddress,
                 apiPriveteKey,
-                getLocation(),
+                selectedLocation(),
                 setWeatherData,
                 setFetchDataStatus
               );
@@ -84,9 +92,23 @@ const App = () => {
                 setLocationType("ip");
                 return;
               } else if (value === "cityName") {
+                setLocationValue(
+                  (prevState: I_locationValue): I_locationValue => {
+                    return { ...prevState, cityName: userSelectedCityValue };
+                  }
+                );
                 setLocationType("cityName");
                 return;
               } else if (value === "lat&lon") {
+                setLocationValue(
+                  (prevState: I_locationValue): I_locationValue => {
+                    return {
+                      ...prevState,
+                      lat: userSelectedLon,
+                      lon: userSelectedLon,
+                    };
+                  }
+                );
                 setLocationType("lat&lon");
                 return;
               } else if (value === "postCode") {
