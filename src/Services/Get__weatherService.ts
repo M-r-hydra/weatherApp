@@ -1,6 +1,10 @@
+// Moduels
 import axios from "axios";
 import Swal from "sweetalert2";
+// Moduels
+// Models
 import { weatherObject } from "../Models/interfaces";
+// Models
 
 export const Get__weatherService = async (
   Get__fullAPI_Address: string,
