@@ -41,7 +41,13 @@ const App = () => {
   // Methods
   // Life cycles
   useEffect(() => {
-    Get__weather(apiAddress, apiPriveteKey, getLocation(), setWeatherData)
+    Get__weather(
+      apiAddress,
+      apiPriveteKey,
+      getLocation(),
+      setWeatherData,
+      setFetchDataStatus
+    )
       .then(() => {
         setFetchDataStatus("done");
       })
@@ -49,7 +55,26 @@ const App = () => {
   }, []);
   // Life cycles
 
-  return <div></div>;
+  return (
+    <div>
+      {fetchDataStatus === "receiving" && "receiving Data "}
+      {fetchDataStatus === "error" && (
+        <>
+          <button
+            onClick={() => {
+              Get__weather(
+                apiAddress,
+                apiPriveteKey,
+                getLocation(),
+                setWeatherData,
+                setFetchDataStatus
+              );
+            }}
+          ></button>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default App;
