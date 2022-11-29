@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import DetectHelper from "./Components/DetectHelper/DetectHelper";
+import WheatherShower from "./Components/WhatherShower/WheatherShower";
 import { I_locationValue, weatherObject } from "./Models/interfaces";
 import { Get__weather } from "./Services/Get__weather";
 
@@ -22,6 +24,7 @@ const App = () => {
   const [fetchDataStatus, setFetchDataStatus] = useState<
     "done" | "receiving" | "error"
   >("receiving");
+  const [cityInputValue, setCityInputValue] = useState<string>("");
   // States
   // Methods
   function getLocation(): string {
@@ -47,17 +50,15 @@ const App = () => {
       getLocation(),
       setWeatherData,
       setFetchDataStatus
-    )
-      .then(() => {
-        setFetchDataStatus("done");
-      })
-      .catch((err) => {});
+    );
   }, []);
   // Life cycles
 
   return (
     <div>
-      {fetchDataStatus === "receiving" && "receiving Data "}
+      {fetchDataStatus === "receiving" && (
+        <h1 className="receiving">{"receiving Data "}</h1>
+      )}
       {fetchDataStatus === "error" && (
         <>
           <button
@@ -70,7 +71,31 @@ const App = () => {
                 setFetchDataStatus
               );
             }}
-          ></button>
+          >
+            Try Again
+          </button>
+        </>
+      )}
+      {fetchDataStatus === "done" && (
+        <>
+          <DetectHelper
+            onOptionsChange={(value: string) => {
+              if (value === "ip") {
+                setLocationType("ip");
+                return;
+              } else if (value === "cityName") {
+                setLocationType("cityName");
+                return;
+              } else if (value === "lat&lon") {
+                setLocationType("lat&lon");
+                return;
+              } else if (value === "postCode") {
+                setLocationType("postCode");
+                return;
+              }
+            }}
+          />
+          <WheatherShower />
         </>
       )}
     </div>
