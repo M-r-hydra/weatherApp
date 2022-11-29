@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import DetectHelper from "./Components/DetectHelper/DetectHelper";
 import WheatherShower from "./Components/WhatherShower/WheatherShower";
 import { I_locationValue, weatherObject } from "./Models/interfaces";
-import { Get__weather } from "./Services/Get__weather";
+import { Get__weatherService } from "./Services/Get__weatherService";
 
 const App = () => {
   // api and Key
@@ -52,7 +52,7 @@ const App = () => {
 
   // Life cycles
   useEffect(() => {
-    Get__weather(
+    Get__weatherService(
       apiAddress,
       apiPriveteKey,
       selectedLocation(),
@@ -71,7 +71,7 @@ const App = () => {
         <>
           <button
             onClick={() => {
-              Get__weather(
+              Get__weatherService(
                 apiAddress,
                 apiPriveteKey,
                 selectedLocation(),

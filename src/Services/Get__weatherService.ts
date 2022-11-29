@@ -2,7 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { weatherObject } from "../Models/interfaces";
 
-export const Get__weather = (
+export const Get__weatherService = async (
   Get__fullAPI_Address: string,
   API_privateKey: string,
   location: string,
